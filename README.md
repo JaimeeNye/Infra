@@ -38,7 +38,7 @@ The next steps will be adding everything to a Kubernetes cluster.
 
 ### Machines
 
-- Home Server: okey CPU, lot of storage, not resilient
+- Home Server: okay CPU, lot of storage, not resilient
 - Gamer PC Raspi: not resilient, no CPU no storage
 - AWS S3 / DynamoDB: very resilient, little storage
 - Vultr VPS: okey resilient, bad CPU, not much storage
