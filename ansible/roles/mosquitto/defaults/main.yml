@@ -1,0 +1,3 @@
+---
+mosquitto_user: "{{ lookup('ansible.builtin.env', 'MOSQUITTO_USER', default='admin') }}"
+mosquitto_password: "{{ lookup('ansible.builtin.env', 'MOSQUITTO_PASSWORD', default='admin') }}"

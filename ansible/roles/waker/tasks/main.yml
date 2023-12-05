@@ -1,0 +1,56 @@
+---
+- name: Install Etherwake for the Wake on LAN capabilities
+  become: true
+  ansible.builtin.apt:
+    name: etherwake
+  notify: "restart waker service"
+
+- name: Get the waker script python requirements from github
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/Cocossoul/wifi-wake-on-lan/main/requirements.txt
+    dest: /home/pi/requirements.txt
+    owner: pi
+    group: pi
+    mode: 0644
+  notify: "restart waker service"
+
+- name: Install the waker script python requirements with pip
+  ansible.builtin.pip:
+    requirements: /home/pi/requirements.txt
+  notify: "restart waker service"
+
+- name: Install the waker python script from Github
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/Cocossoul/wifi-wake-on-lan/main/waker.py
+    dest: /home/pi/waker.py
+    owner: pi
+    group: pi
+    mode: 0644
+  notify: "restart waker service"
+
+- name: Install the waker bash script
+  ansible.builtin.template:
+    src: waker.sh
+    dest: /home/pi/waker.sh
+    owner: pi
+    group: pi
+    mode: 0755
+  notify: "restart waker service"
+
+- name: Install the waker systemd service
+  become: true
+  ansible.builtin.copy:
+    src: waker.service
+    dest: /etc/systemd/system/waker.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: "restart waker service"
+
+- name: Make sure the waker systemd service is started
+  become: true
+  ansible.builtin.systemd:
+    name: waker.service
+    state: started
+    enabled: true
+    masked: false

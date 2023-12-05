@@ -1,0 +1,24 @@
+name: Check Terraform plan
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  plan:
+    name: plan
+    runs-on: ubuntu-latest
+    container: infra/ci-tools:latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - name: Terraform fmt check
+        run: |
+          terraform fmt -check -recursive
+      - name: Terraform plan
+        env:
+          PASSBOLT_CI_ACS_BASE64: ${{secrets.PASSBOLT_CI_ACS_BASE64}}
+          PASSBOLT_CI_PASSWORD: ${{secrets.PASSBOLT_CI_PASSWORD}}
+          SSH_CI_PRIVATEKEY_BASE64: ${{secrets.SSH_CI_PRIVATEKEY_BASE64}}
+        run: |
+          ./ci-wrapper.sh ./terraform.sh plan -lock-timeout=5m

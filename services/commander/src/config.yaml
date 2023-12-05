@@ -1,0 +1,35 @@
+logLevel: "DEBUG"
+actions:
+- title: Search annuary (see logs for result)
+  shell: grep "{{ phone }},{{ firstname }} {{ lastname }},.*" "/srv/annuary/{{ country }}"
+  icon: "&#128241;"
+  timeout: 10
+  arguments:
+    - name: country
+      title: Country
+      default: france.txt
+      choices:
+        - title: France
+          value: france.txt
+        - title: Belgium
+          value: belgium.txt
+        - title: Germany
+          value: germany.txt
+        - title: United Kingdom
+          value: uk.txt
+        - title: Spain
+          value: spain.txt
+        - title: Italy
+          value: italy.txt
+    - name: firstname
+      title: First Name
+      type: very_dangerous_raw_string
+      default: .*
+    - name: lastname
+      title: Last Name
+      type: very_dangerous_raw_string
+      default: .*
+    - name: phone
+      title: Phone
+      type: very_dangerous_raw_string
+      default: .*

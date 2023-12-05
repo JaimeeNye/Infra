@@ -1,0 +1,35 @@
+---
+- name: Set timezone to Paris in France
+  become: true
+  ansible.builtin.command: timedatectl set-timezone Europe/Paris
+
+- name: Update and upgrade apt packages
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: true
+    cache_valid_time: 86400 # Cache valid for a day
+
+- name: Install unattended-upgrades
+  become: true
+  ansible.builtin.apt:
+    pkg: unattended-upgrades
+    state: present
+
+- name: Create apt auto-upgrades configuration
+  become: true
+  ansible.builtin.copy:
+    src: 20auto-upgrades
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create unattended-upgrades configuration
+  become: true
+  ansible.builtin.copy:
+    src: 50unattended-upgrades
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    owner: root
+    group: root
+    mode: 0644

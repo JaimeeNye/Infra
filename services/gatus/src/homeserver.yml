@@ -1,0 +1,247 @@
+storage:
+  type: sqlite
+  path: /srv/data.db
+
+client:
+  dns-resolver: "tcp://pihole:53"
+
+alerting:
+  discord:
+    webhook-url: "${ discord_webhook }"
+
+endpoints:
+  - name: homeserver homepage
+    url: "https://infra.com"
+    interval: 30s
+    group: 1. public
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: mealie
+    url: "https://mealie.infra.com"
+    interval: 30s
+    group: 2. private
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: portainer
+    url: "https://cockpit.infra.com"
+    interval: 30s
+    group: 2. private
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: cloud
+    url: "https://cloud.infra.com"
+    interval: 30s
+    group: 2. private
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: firefly
+    url: "https://firefly.infra.com"
+    interval: 30s
+    group: 2. private
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: firefly importer
+    url: "https://import.firefly.infra.com"
+    interval: 30s
+    group: 2. private
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: immich
+    url: "https://photos.infra.com"
+    interval: 30s
+    group: 2. private
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: wireguard
+    url: "http://wireguard.infra.com:5000"
+    interval: 30s
+    group: 2. private
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: pihole
+    url: "https://dns.infra.com/admin"
+    interval: 30s
+    group: 2. private
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: cloud dns
+    url: "pihole"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "cloud.infra.com"
+      query-type: "A"
+    conditions:
+      - "[BODY] == 192.168.1.24"
+      - "[DNS_RCODE] == NOERROR"
+
+  - name: mealie dns
+    url: "pihole"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "mealie.infra.com"
+      query-type: "A"
+    conditions:
+      - "[BODY] == 192.168.1.24"
+      - "[DNS_RCODE] == NOERROR"
+
+  - name: homepage dns
+    url: "pihole"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "home.infra.com"
+      query-type: "A"
+    conditions:
+      - "[BODY] == 192.168.1.24"
+      - "[DNS_RCODE] == NOERROR"
+
+  - name: gatus dns
+    url: "pihole"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "gatus.infra.com"
+      query-type: "A"
+    conditions:
+      - "[BODY] == 192.168.1.24"
+      - "[DNS_RCODE] == NOERROR"
+
+  - name: commander dns
+    url: "pihole"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "commander.infra.com"
+      query-type: "A"
+    conditions:
+      - "[BODY] == 192.168.1.24"
+      - "[DNS_RCODE] == NOERROR"
+
+  - name: pihole dns
+    url: "pihole"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "dns.infra.com"
+      query-type: "A"
+    conditions:
+      - "[BODY] == 192.168.1.24"
+      - "[DNS_RCODE] == NOERROR"
+
+  - name: firefly dns
+    url: "pihole"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "firefly.infra.com"
+      query-type: "A"
+    conditions:
+      - "[BODY] == 192.168.1.24"
+      - "[DNS_RCODE] == NOERROR"
+
+  - name: firefly importer dns
+    url: "pihole"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "firefly.infra.com"
+      query-type: "A"
+    conditions:
+      - "[BODY] == 192.168.1.24"
+      - "[DNS_RCODE] == NOERROR"
+
+  - name: monitoring dns
+    url: "pihole"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "monitoring.infra.com"
+      query-type: "A"
+    conditions:
+      - "[BODY] == 192.168.1.24"
+      - "[DNS_RCODE] == NOERROR"
+
+  - name: portainer dns
+    url: "pihole"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "cockpit.infra.com"
+      query-type: "A"
+    conditions:
+      - "[BODY] == 192.168.1.24"
+      - "[DNS_RCODE] == NOERROR"

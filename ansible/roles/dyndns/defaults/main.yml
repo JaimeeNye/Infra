@@ -1,0 +1,5 @@
+---
+dyndns_zone_id: "{{ lookup('ansible.builtin.env', 'DYNDNS_ZONE_ID') }}"
+dyndns_record_id: "{{ lookup('ansible.builtin.env', 'DYNDNS_RECORD_ID') }}"
+dyndns_token: "{{ lookup('ansible.builtin.env', 'DYNDNS_TOKEN') }}"
+dyndns_subdomain: "{{ lookup('ansible.builtin.env', 'DYNDNS_SUBDOMAIN') }}"

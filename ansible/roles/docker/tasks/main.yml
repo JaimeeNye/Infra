@@ -1,0 +1,56 @@
+---
+- name: Install required packages
+  become: true
+  ansible.builtin.apt:
+    name:
+      - lsb-release
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+
+- name: Store Distro release name
+  ansible.builtin.shell: lsb_release -cs
+  register: lsb_release
+
+- name: Add Docker GPG apt Key
+  become: true
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/{{ ansible_distribution|lower }}/gpg
+    state: present
+
+- name: Add Docker Repository
+  become: true
+  ansible.builtin.apt_repository:
+    repo: deb https://download.docker.com/linux/{{ ansible_distribution|lower }} {{ lsb_release.stdout }} stable
+    state: present
+
+- name: Update apt with the new cache and install docker-ce
+  become: true
+  ansible.builtin.apt:
+    name: docker-ce
+    state: present
+    update_cache: true
+  notify: "restart docker service"
+
+- name: Make sure the Docker service is started
+  become: true
+  ansible.builtin.systemd:
+    name: docker.service
+    state: started
+    enabled: true
+    masked: false
+
+- name: Add Ansible user to docker group ({{ ansible_user }})
+  become: true
+  ansible.builtin.user:
+    name: '{{ ansible_user }}'
+    groups: docker
+    append: true
+
+- name: Ensure Crowdsec collections are up-to-date
+  ansible.builtin.cron:
+    name: "update crowdsec collections"
+    minute: "0"
+    hour: "2"
+    job: "docker exec crowdsec cscli hub update && docker exec crowdsec cscli hub upgrade"

@@ -1,0 +1,18 @@
+http:
+  middlewares:
+    secured-chain:
+      chain:
+        middlewares:
+          - real-ip@file
+          - ratelimiter@file
+    real-ip:
+      plugin:
+        cloudflarewarp:
+          disableDefault: true
+          trustip:
+            - "::/0"
+            - "0.0.0.0/0"
+    ratelimiter:
+      rateLimit:
+        average: 30
+        burst: 25

@@ -1,0 +1,10 @@
+---
+- name: Restart the waker systemd service
+  become: true
+  ansible.builtin.systemd:
+    name: waker.service
+    state: restarted
+    daemon_reload: true
+    enabled: true
+    masked: false
+  listen: "restart waker service"

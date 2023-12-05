@@ -1,0 +1,8 @@
+all:
+  hosts:
+    vultr:
+      ansible_host: ${ vultr_ip }
+      ansible_port: 22
+  vars:
+    ansible_user: coco
+    ansible_host_key_checking: no

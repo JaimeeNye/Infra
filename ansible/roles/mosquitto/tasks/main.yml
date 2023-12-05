@@ -1,0 +1,31 @@
+---
+- name: Install the Mosquitto package
+  become: true
+  ansible.builtin.apt:
+    name: mosquitto
+  notify: "restart mosquitto service"
+
+- name: Create Mosquitto configuration
+  become: true
+  ansible.builtin.copy:
+    src: server.conf
+    dest: /etc/mosquitto/conf.d/server.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: "restart mosquitto service"
+
+- name: Create Mosquitto password file
+  become: true
+  ansible.builtin.command: mosquitto_passwd -c /etc/mosquitto/passwd.txt "{{ mosquitto_user }}" "{{ mosquitto_password }}"
+  args:
+    creates: /etc/mosquitto/passwd.txt
+  notify: "restart mosquitto service"
+
+- name: Make sure the Mosquitto service is started
+  become: true
+  ansible.builtin.systemd:
+    name: mosquitto.service
+    state: started
+    enabled: true
+    masked: false

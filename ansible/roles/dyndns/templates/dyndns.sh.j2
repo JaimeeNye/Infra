@@ -1,0 +1,15 @@
+#!/bin/sh
+
+ip=$(curl https://api.ipify.org?format=plaintext)
+
+curl --request PUT \
+  --url "https://api.cloudflare.com/client/v4/zones/{{ dyndns_zone_id }}/dns_records/{{ dyndns_record_id }}" \
+  --header 'Content-Type: application/json' \
+  --header 'X-Auth-Email: corentin0pape@gmail.com' \
+  --header 'X-Auth-Key: {{ dyndns_token }}' \
+  --data "{
+  \"content\": \"${ip}\",
+  \"name\": \"{{ dyndns_subdomain }}\",
+  \"proxied\": false,
+  \"type\": \"A\"
+}"

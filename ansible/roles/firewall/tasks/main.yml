@@ -1,0 +1,30 @@
+---
+- name: Install required packages
+  become: true
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+
+- name: Enable UFW and deny all access by default
+  become: true
+  community.general.ufw:
+    state: enabled
+    policy: deny
+
+- name: Allow all access to port 80
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: '80'
+
+- name: Allow all access to port 443
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: '443'
+
+- name: Allow all access to port 22
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: ssh

@@ -1,0 +1,10 @@
+[Unit]
+Description=WakeOnLanGamerz
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/home/pi/waker.sh
+
+[Install]
+WantedBy=multi-user.target

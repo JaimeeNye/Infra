@@ -1,0 +1,8 @@
+all:
+  hosts:
+    homeserver:
+      ansible_host: ${ dyndns_address }
+      ansible_port: 1844
+  vars:
+    ansible_user: coco
+    ansible_host_key_checking: no

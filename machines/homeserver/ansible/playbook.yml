@@ -1,0 +1,45 @@
+- name: Configure my home server
+  hosts: all
+  collections:
+    - devsec.hardening
+    - ansible.posix
+    - community.docker
+    - community.general
+  roles:
+    - { role: copy_ssh_key, tags: copy_ssh_key }
+    - { role: ssh_hardening, tags: ssh_hardening }
+    - { role: core, tags: core }
+    - { role: dyndns, tags: dyndns }
+    - { role: firewall, tags: firewall }
+    - { role: fail2ban_tweaks, tags: fail2ban_tweaks }
+    - { role: docker, tags: docker }
+  tasks:
+    - name: Allow all access to Minecraft server port 25565
+      become: true
+      community.general.ufw:
+        rule: allow
+        port: 25565
+    - name: Allow all access to Minecraft RCON server port 25575
+      become: true
+      community.general.ufw:
+        rule: allow
+        port: 25575
+    - name: Allow Wireguard port
+      become: true
+      community.general.ufw:
+        rule: allow
+        port: 51820
+    - name: Mount RAID storage device
+      become: true
+      ansible.posix.mount:
+        path: /mnt/raid
+        src: /dev/md0
+        fstype: ext4
+        state: mounted
+  vars:
+    ssh_pam_support: false
+    ssh_use_pam: false
+    ssh_kerberos_support: false
+    ssh_server_password_login: false
+    sshd_authenticationmethods: publickey
+    ssh_permit_root_login: without-password

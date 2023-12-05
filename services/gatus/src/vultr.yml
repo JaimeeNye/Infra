@@ -1,0 +1,94 @@
+storage:
+  type: sqlite
+  path: /srv/data.db
+
+alerting:
+  discord:
+    webhook-url: "${ discord_webhook }"
+
+endpoints:
+  - name: homepage
+    url: "https://infra.com"
+    interval: 30s
+    group: 1. public
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: passbolt
+    url: "https://passbolt.infra.com"
+    interval: 30s
+    group: 2. private
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: portainer
+    url: "https://cockpit.infra.com"
+    interval: 30s
+    group: 2. private
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: tbeteouquoi
+    url: "https://tbeteouquoi.fr"
+    interval: 30s
+    group: 4. internals
+    conditions:
+      - "[STATUS] == 200"         # Status must be 200
+      - "[RESPONSE_TIME] < 300"   # Response time must be under 300ms
+    alerts:
+      - type: discord
+        description: "healthcheck failed"
+        send-on-resolved: true
+        failure-threshold: 6
+        success-threshold: 3
+
+  - name: passbolt dns
+    url: "8.8.8.8"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "passbolt.infra.com"
+      query-type: "A"
+    conditions:
+      - "[DNS_RCODE] == NOERROR"
+
+  - name: homepage dns
+    url: "8.8.8.8"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "home.infra.com"
+      query-type: "A"
+    conditions:
+      - "[DNS_RCODE] == NOERROR"
+
+  - name: gatus dns
+    url: "8.8.8.8"
+    interval: 30s
+    group: 3. dns
+    dns:
+      query-name: "gatus.infra.com"
+      query-type: "A"
+    conditions:
+      - "[DNS_RCODE] == NOERROR"

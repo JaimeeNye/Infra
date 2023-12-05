@@ -1,0 +1,32 @@
+---
+- name: Install the curl package
+  become: true
+  ansible.builtin.apt:
+    name: curl
+
+- name: Install the cron package
+  become: true
+  ansible.builtin.apt:
+    name: cron
+
+- name: Install dyndns update script
+  become: true
+  ansible.builtin.template:
+    src: dyndns.sh.j2
+    dest: /etc/dyndns.sh
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Run dyndns update
+  become: true
+  ansible.builtin.command: /etc/dyndns.sh
+
+- name: Start a cronjob to update dyndns everyday
+  become: true
+  ansible.builtin.cron:
+    name: "update dyndns"
+    weekday: "*"
+    minute: "*"
+    hour: "1"
+    job: "/etc/dyndns.sh"

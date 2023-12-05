@@ -1,0 +1,19 @@
+{
+  "enabledManagers": ["dockerfile", "ansible-galaxy", "terraform", "pip_requirements", "github-actions", "regex"],
+  "regexManagers": [
+    {
+      "fileMatch": ["(^|/)*\\.tf$"],
+      "matchStrings": [
+        "\\s*name\\s*=\\s*\"(?<depName>.*?):(?<currentValue>.*?)\"\\s*#\\s*renovate_docker\\n"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "fileMatch": ["(^|/)*\\.tf$"],
+      "matchStrings": [
+        "\\s*version\\s*=\\s*\"(?<currentValue>.*?)\"\\s*#\\s*renovate_docker_multiple\\s*(?<depName>.*?)\\n"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ]
+}
