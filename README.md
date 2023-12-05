@@ -32,8 +32,7 @@ ones and there is only one Traefik service configuration.
 
 ## Kubernetes
 
-I think that most of the features above could be managed by Kubernetes,
-so in the future I will probably use it.
+The next steps will be adding everything to a Kubernetes cluster. 
 
 ## Resources
 
